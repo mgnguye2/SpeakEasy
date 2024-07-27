@@ -29,8 +29,10 @@ def login(entry_user, entry_password):
 
     if check_creds(member_id, password):
         messagebox.showinfo("Login Success", "Welcome!")
+        return True
     else:
         messagebox.showerror("Login Failed", "Invalid ID or Password")
+        return False
 
 # Function to create the login GUI
 def create_login_gui(root):
@@ -46,10 +48,5 @@ def create_login_gui(root):
     entry_password = tk.Entry(root, show="*")
     entry_password.grid(row=1, column=1, padx=10, pady=10)
 
-    button_login = tk.Button(root, text="Login", command=lambda: login(entry_user, entry_password))
-    button_login.grid(row=2, column=0, columnspan=2, pady=10)
-    
     return entry_user, entry_password
-
-
 
