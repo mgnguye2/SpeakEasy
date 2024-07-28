@@ -3,6 +3,11 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
+# This function opens the board creation window
+def open_board_gui():
+    import boardGUI
+    boardGUI.create_board_window()
+
 # Function to connect to the database
 def get_db_connection():
     return mysql.connector.connect(
@@ -83,3 +88,14 @@ def create_account_gui(root):
 
     button_create_account = tk.Button(create_account_window, text="Create Account", command=create_account)
     button_create_account.grid(row=3, column=0, columnspan=2, pady=10)
+
+    # Add the "Create Board" button to the main window
+    create_board_button = tk.Button(root, text="Create Board", command=open_board_gui)
+    create_board_button.pack(pady=10)
+
+# Assuming this function is called somewhere in your main script to create the account GUI
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Main Window")
+    create_account_gui(root)
+    root.mainloop()
