@@ -1,9 +1,8 @@
-import mysql.connector  # For database operations
-import tkinter as tk  # For GUI
-from tkinter import messagebox  # For dialog boxes
-import random  # For generating random usernames
+import tkinter as tk
+from tkinter import messagebox
+import mysql.connector
+import random
 
-# Function to connect to the MySQL database
 def get_db_connection():
     return mysql.connector.connect(
         host="107.180.1.16",
@@ -12,7 +11,7 @@ def get_db_connection():
         database="summer2024team4"
     )
 
-# Function to check if a username is unique
+# Function to check if the username is unique
 def is_unique_username(username):
     try:
         connection = get_db_connection()
@@ -27,7 +26,7 @@ def is_unique_username(username):
         messagebox.showerror("Database Error", f"Error: {err}")
         return False
 
-# Function to generate a unique random username
+# Function to generate a random and unique username
 def generate_unique_username():
     while True:
         username = ''.join(str(random.randint(1, 9)) for _ in range(10))
@@ -51,36 +50,37 @@ def create_user(member_id, password, apply_for_admin=False):
     except mysql.connector.Error as err:
         messagebox.showerror("Database Error", f"Error: {err}")
 
-# Function to set up the account creation GUI
+# Function to create the account creation GUI
 def create_account_gui(root):
     create_account_window = tk.Toplevel(root)
     create_account_window.title("Create Account")
 
-    username = generate_unique_username()  # Generate a unique username
+    # Generate a unique username
+    username = generate_unique_username()
 
-    # Display the generated username
+    # Display the username
     label_username = tk.Label(create_account_window, text=f"Your username: {username}")
     label_username.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
-    # Password entry fields
+    # Password entry
     label_password = tk.Label(create_account_window, text="Password")
     label_password.grid(row=1, column=0, padx=10, pady=10)
     entry_password = tk.Entry(create_account_window, show="*")
     entry_password.grid(row=1, column=1, padx=10, pady=10)
 
+    # Confirm password entry
     label_confirm_password = tk.Label(create_account_window, text="Confirm Password")
     label_confirm_password.grid(row=2, column=0, padx=10, pady=10)
     entry_confirm_password = tk.Entry(create_account_window, show="*")
     entry_confirm_password.grid(row=2, column=1, padx=10, pady=10)
 
-    # Optional admin application checkbox
+    # Apply for admin checkbox
     label_apply_admin = tk.Label(create_account_window, text="Apply for Admin (Optional)")
     label_apply_admin.grid(row=3, column=0, padx=10, pady=10)
     apply_admin_var = tk.IntVar()
     apply_admin_check = tk.Checkbutton(create_account_window, variable=apply_admin_var)
     apply_admin_check.grid(row=3, column=1, padx=10, pady=10)
 
-    # Create account button function
     def create_account():
         password = entry_password.get()
         confirm_password = entry_confirm_password.get()
@@ -93,17 +93,6 @@ def create_account_gui(root):
         create_user(username, password, apply_for_admin)
         create_account_window.destroy()
 
-    # Button to create the account
+    # Create Account button
     button_create_account = tk.Button(create_account_window, text="Create Account", command=create_account)
     button_create_account.grid(row=4, column=0, columnspan=2, pady=10)
-
-    # Button to open the board GUI (for demonstration purposes)
-    create_board_button = tk.Button(root, text="Create Board", command=open_board_gui)
-    create_board_button.pack(pady=10)
-
-# Main application entry point
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Main Window")
-    create_account_gui(root)  # Initialize the account creation GUI
-    root.mainloop()
