@@ -2,17 +2,19 @@ import mysql.connector
 import tkinter as tk
 from tkinter import messagebox
 
-# Function to connect to the database and check credentials
+def get_db_connection():
+    return mysql.connector.connect(
+        host="107.180.1.16",
+        user="summer2024team4",
+        password="summer2024team4",
+        database="summer2024team4"
+    )
+
 def check_creds(member_id, password):
     try:
-        connection = mysql.connector.connect(
-            host="107.180.1.16",
-            user="summer2024team4",
-            password="summer2024team4",
-            database="summer2024team4"
-        )
+        connection = get_db_connection()
         cursor = connection.cursor()
-        query = "SELECT * FROM member WHERE memberID = %s AND password = %s"
+        query = "SELECT admin FROM member WHERE memberID = %s AND password = %s"
         cursor.execute(query, (member_id, password))
         result = cursor.fetchone()
         cursor.close()
@@ -22,19 +24,18 @@ def check_creds(member_id, password):
         messagebox.showerror("Database Error", f"Error: {err}")
         return None
 
-# Login function and pop-ups for success or failure
 def login(entry_user, entry_password):
     member_id = entry_user.get()
     password = entry_password.get()
+    result = check_creds(member_id, password)
 
-    if check_creds(member_id, password):
+    if result:
         messagebox.showinfo("Login Success", "Welcome!")
-        return True
+        return result[0] == 1  # Return True if the user is admin, otherwise False
     else:
         messagebox.showerror("Login Failed", "Invalid ID or Password")
-        return False
+        return None
 
-# Function to create the login GUI
 def create_login_gui(root):
     label_user = tk.Label(root, text="ID")
     label_user.grid(row=0, column=0, padx=10, pady=10)
@@ -49,4 +50,3 @@ def create_login_gui(root):
     entry_password.grid(row=1, column=1, padx=10, pady=10)
 
     return entry_user, entry_password
-
