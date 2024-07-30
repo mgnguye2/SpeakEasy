@@ -1,7 +1,8 @@
-import mysql.connector
-import tkinter as tk
-from tkinter import messagebox
+import mysql.connector  # For database operations
+import tkinter as tk  # For GUI
+from tkinter import messagebox  # For dialog boxes
 
+# Function to connect to the MySQL database
 def get_db_connection():
     return mysql.connector.connect(
         host="107.180.1.16",
@@ -10,6 +11,7 @@ def get_db_connection():
         database="summer2024team4"
     )
 
+# Function to validate user credentials
 def check_creds(member_id, password):
     try:
         connection = get_db_connection()
@@ -24,6 +26,7 @@ def check_creds(member_id, password):
         messagebox.showerror("Database Error", f"Error: {err}")
         return None
 
+# Function to handle login logic
 def login(entry_user, entry_password):
     member_id = entry_user.get()
     password = entry_password.get()
@@ -31,11 +34,12 @@ def login(entry_user, entry_password):
 
     if result:
         messagebox.showinfo("Login Success", "Welcome!")
-        return result[0] == 1  # Return True if the user is admin, otherwise False
+        return result[0] == 1  # Check if user is admin
     else:
         messagebox.showerror("Login Failed", "Invalid ID or Password")
         return None
 
+# Function to set up the login GUI
 def create_login_gui(root):
     label_user = tk.Label(root, text="ID")
     label_user.grid(row=0, column=0, padx=10, pady=10)
