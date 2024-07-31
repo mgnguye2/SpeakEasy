@@ -53,7 +53,7 @@ def discussion_board_gui(is_admin=False):
     button_logout.pack(pady=5)
 
     # Replaced open_create_board_window with create_board_window
-    create_board_button = tk.Button(button_frame, text="Create Board", command=boardCreateGUI.create_board_window, width=20, height=2)
+    create_board_button = tk.Button(button_frame, text="Create Board", command=lambda: boardCreateGUI.create_board_window(load_boards), width=20, height=2)
     create_board_button.pack(pady=5)
 
     def edit_board():
