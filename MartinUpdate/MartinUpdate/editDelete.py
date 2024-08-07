@@ -16,7 +16,7 @@ def refresh_listbox(listbox, post_ids):
     try:
         connection = get_db_connection()
         cursor = connection.cursor()
-        cursor.execute("SELECT messageID, message FROM main")
+        cursor.execute("SELECT boardID, topic FROM board")
         posts = cursor.fetchall()
         cursor.close()
         connection.close()
@@ -41,17 +41,17 @@ def open_edit_gui(post_id, post_content, listbox, post_ids):
     def save_changes():
         new_content = content_text.get("1.0", tk.END).strip()
         if not new_content:
-            messagebox.showerror("Error", "Post content cannot be empty.")
+            messagebox.showerror("Error", "Board content cannot be empty.")
             return
 
         try:
             connection = get_db_connection()
             cursor = connection.cursor()
-            cursor.execute("UPDATE main SET message = %s WHERE messageID = %s", (new_content, post_id))
+            cursor.execute("UPDATE board SET topic = %s WHERE boardID = %s", (new_content, post_id))
             connection.commit()
             cursor.close()
             connection.close()
-            messagebox.showinfo("Success", "Post updated successfully!")
+            messagebox.showinfo("Success", "Board updated successfully!")
             edit_window.destroy()
             refresh_listbox(listbox, post_ids)
         except mysql.connector.Error as err:
@@ -69,7 +69,7 @@ def open_delete_gui(post_id, post_content, listbox, post_ids):
         try:
             connection = get_db_connection()
             cursor = connection.cursor()
-            cursor.execute("DELETE FROM main WHERE messageID = %s", (post_id,))
+            cursor.execute("DELETE FROM board WHERE boardID = %s", (post_id,))
             connection.commit()
             cursor.close()
             connection.close()

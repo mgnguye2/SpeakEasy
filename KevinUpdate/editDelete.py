@@ -47,7 +47,7 @@ def open_edit_gui(post_id, post_content, listbox, post_ids):
         try:
             connection = get_db_connection()
             cursor = connection.cursor()
-            cursor.execute("UPDATE main SET message = %s WHERE messageID = %s", (new_content, post_id))
+            cursor.execute("UPDATE board SET topic = %s WHERE boardID = %s", (new_content, post_id))
             connection.commit()
             cursor.close()
             connection.close()
